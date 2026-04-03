@@ -1,5 +1,5 @@
 # CS32FINALPROJECT_knm
-CS32 Final Project w/ Spotify API
+CS32 Final Project w/ Spotify API \n
 For our final project, we initially wanted to predict what music a person wants to hear based on their previous listening history.
 However, we have recently simplified it to a music recommender based on the genres a person likes and the keywords the like to hear.
 For example, if someone likes to hear R&B love songs, what if they tried indie love songs instead? 
