@@ -1,2 +1,2 @@
-# CS32fp_ak_rn_mm
+# CS32FINALPROJECT_knm
 CS32 Final Project w/ Spotify API
