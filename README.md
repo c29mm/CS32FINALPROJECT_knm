@@ -1,5 +1,3 @@
 # CS32FINALPROJECT_knm
-CS32 Final Project w/ Spotify API
 
-THIS IS WHAT WE NEED TO UPDATE
-Our updated project involves combing through movie scripts. (Ryan lowkey can you finish this)
+Our project analyzes movie scripts in .txt format by parsing dialogue to extract and quantify character-based metrics. Specifically, we aim to identify the number of distinct characters, measure interaction frequency between characters, calculate the proportion of dialogue attributed to each character, and track how often characters reference one another in conversation. These metrics serve as a proxy for narrative and character complexity. We will then compare these quantitative measures against external ratings from sources such as IMDb and Rotten Tomatoes to investigate whether there is any correlation between script-level complexity and audience or critical reception.
