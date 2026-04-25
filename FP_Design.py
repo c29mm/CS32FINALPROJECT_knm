@@ -36,5 +36,5 @@ def print_summary(counts):
         print(f"{character}: {counts[character]} dialogue blocks")
 
 if __name__ == "__main__":
-    counts = parse_script("sample_TDK_script.txt")
+    counts = parse_script("incredibles.txt")
     print_summary(counts)

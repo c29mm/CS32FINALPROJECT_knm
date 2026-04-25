@@ -2,4 +2,4 @@
 CS32 Final Project w/ Spotify API
 
 THIS IS WHAT WE NEED TO UPDATE
-Our updated project involves combing through 
+Our updated project involves combing through movie scripts. (Ryan lowkey can you finish this)
