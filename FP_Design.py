@@ -12,14 +12,46 @@ def get_online_rating(movie_title, api_key):
     data = response.json()
 
     if data.get("Response") == "False":
+        print("API Error:", data.get("Error"))
         return None
 
     ratings = data.get("Ratings", [])
 
+    # try to find Rotten Tomatoes rating
     for rating in ratings:
         if rating["Source"] == "Rotten Tomatoes":
-            return rating["Value"]
-    return None
+            return f"Rotten Tomatoes: {rating['Value']}"
+
+    # fallback to IMDb rating if Rotten Tomatoes is unavailable
+    if data.get("imdbRating") and data["imdbRating"] != "N/A":
+        return f"IMDb: {data['imdbRating']}/10"
+
+    # if nothing is available
+    return "No rating available"
+
+def clean_character_name(name):
+    # remove extra whitespace
+    name = name.strip()
+
+    # ignore obvious title or scene divider lines
+    if "SCENE" in name or "_" in name:
+        return None
+
+    # remove quotation marks around titles/names
+    name = name.replace('"', "")
+
+    # combine alternate names for the same major characters
+    aliases = {
+        "BOB (MR. INCREDIBLE)": "BOB",
+        "MR. INCREDIBLE": "BOB",
+        "HELEN (ELASTIGIRL)": "HELEN",
+        "ELASTIGIRL": "HELEN",
+        "LUCIUS (FROZONE)": "LUCIUS",
+        "FROZONE": "LUCIUS",
+        "BUDDY (INCREDIBOY)": "BUDDY",
+    }
+
+    return aliases.get(name, name)
 
 def parse_script(filepath):
     # read file and strip empty lines
@@ -32,17 +64,17 @@ def parse_script(filepath):
 
     for line in lines:
         if line.isupper():    # this line is a speaker name
-            if current and has_dialogue:
+            if current is not None and has_dialogue:
                 counts[current] += 1   # count previous speaker block
 
-            current = line             # update speaker
+            current = clean_character_name(line)             # update speaker
             has_dialogue = False       # reset dialogue flag
 
         else:
             has_dialogue = True        # this line is dialogue
 
     # catch the last speaker block
-    if current and has_dialogue:
+    if current is not None and has_dialogue:
         counts[current] += 1
 
     return counts
@@ -71,9 +103,9 @@ def print_summary(counts):
     for character, count in counts.most_common():
         percent = (count / total_dialogue) * 100  # compute percentage of total dialogue
         print(f"{character}: {count} dialogue blocks ({percent:.1f}%)")
-        
+
 if __name__ == "__main__":
-    api_key = "YOUR_API_KEY_HERE"
+    api_key = "b621eeaf"
     movie = input("Enter movie title: ")
 
     rating = get_online_rating(movie, api_key)
