@@ -1,4 +1,25 @@
 from collections import Counter # dictionary that automatically counts
+import requests #helpful for connecting to rankings site
+
+def get_online_rating(movie_title, api_key):
+    url = "http://www.omdbapi.com/"
+    params = {
+        "t": movie_title,
+        "apikey": api_key
+    }
+
+    response = requests.get(url, params = params)
+    data = response.json()
+
+    if data.get("Response") == "False":
+        return None
+
+    ratings = data.get("Ratings", [])
+
+    for rating in ratings:
+        if rating["Source"] == "Rotten Tomatoes":
+            return rating["Value"]
+    return None
 
 def parse_script(filepath):
     # read file and strip empty lines
@@ -36,5 +57,26 @@ def print_summary(counts):
         print(f"{character}: {counts[character]} dialogue blocks")
 
 if __name__ == "__main__":
-    counts = parse_script("incredibles.txt")
-    print_summary(counts)
+    api_key = "YOUR_API_KEY_HERE"
+    movie = input("Enter movie title: ")
+
+    rating = get_online_rating(movie, api_key)
+
+    if rating:
+        print(f"Rotten Tomatoes rating for {movie}: {rating}")
+    else:
+        print("Rotten Tomatoes rating not found.")
+    script_file = input("Enter script file name: ")
+    try:
+        counts = parse_script(script_file)
+        print_summary(counts)
+        num_characters = len(counts)
+        total_dialogue = sum(counts.values())
+
+        print("\nComplexity Metrics:")
+        print(f"Number of characters: {num_characters}")
+        print(f"Total dialogue blocks: {total_dialogue}")
+        
+    except FileNotFoundError:
+        print("Error: Script file not found.")
+
