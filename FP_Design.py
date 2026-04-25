@@ -49,13 +49,29 @@ def parse_script(filepath):
 
 
 def print_summary(counts):
+    # handle case where no characters were detected
+    if not counts:
+        print("No characters detected.")
+        return
+
+    # calculate total dialogue blocks across all characters
+    total_dialogue = sum(counts.values())
+
+    # find the character with the most dialogue
+    most_talkative = counts.most_common(1)[0]
+
     # print all detected characters
     print("Characters detected:", ", ".join(counts.keys()))
 
-    # print dialogue count for each character
-    for character in counts:
-        print(f"{character}: {counts[character]} dialogue blocks")
+    # print the most talkative character
+    print(f"\nMost talkative character: {most_talkative[0]} ({most_talkative[1]} dialogue blocks)")
 
+    # print dialogue count and percentage for each character
+    print("\nDialogue by Character:")
+    for character, count in counts.most_common():
+        percent = (count / total_dialogue) * 100  # compute percentage of total dialogue
+        print(f"{character}: {count} dialogue blocks ({percent:.1f}%)")
+        
 if __name__ == "__main__":
     api_key = "YOUR_API_KEY_HERE"
     movie = input("Enter movie title: ")
@@ -76,7 +92,7 @@ if __name__ == "__main__":
         print("\nComplexity Metrics:")
         print(f"Number of characters: {num_characters}")
         print(f"Total dialogue blocks: {total_dialogue}")
-        
+
     except FileNotFoundError:
         print("Error: Script file not found.")
 
